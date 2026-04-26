@@ -1,0 +1,635 @@
+{
+  "uuid": "9ce3c22b-2d1a-4a55-a7c0-56d4a7fd3b7a",
+  "lastMigration": 33,
+  "name": "ChâTop API",
+  "endpointPrefix": "api",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "0.0.0.0",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "type": "http",
+      "documentation": "Register a new user",
+      "method": "post",
+      "endpoint": "auth/register",
+      "responses": [
+        {
+          "uuid": "44f44d11-63ae-4231-ba77-83f53d1a9d03",
+          "body": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY0MDAwMDAwMH0.dummytoken\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "callbacks": [],
+          "crudKey": "id"
+        },
+        {
+          "uuid": "ac8b7810-fe46-4bdc-a2c2-1878c57ad177",
+          "body": "{\"message\": \"Email already exists\"}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Email exists",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "rules": [],
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "a2b3c4d5-e6f7-8901-bcde-f12345678901",
+      "type": "http",
+      "documentation": "Login user",
+      "method": "post",
+      "endpoint": "auth/login",
+      "responses": [
+        {
+          "uuid": "51783113-a2f5-4241-bfca-dadce544a71e",
+          "body": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY0MDAwMDAwMH0.dummytoken\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "4a4626ef-070d-40db-95f9-0b442b32f714",
+          "body": "{\"message\": \"Invalid credentials\"}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "Unauthorized",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a3b4c5d6-e7f8-9012-cdef-123456789012",
+      "type": "http",
+      "documentation": "Get current user",
+      "method": "get",
+      "endpoint": "auth/me",
+      "responses": [
+        {
+          "uuid": "0d6eefa7-6dc9-43ce-aab5-526f5c1a6fb3",
+          "body": "{\"id\": 1, \"name\": \"Test User\", \"email\": \"test@test.com\", \"created_at\": \"2024-01-01T00:00:00Z\", \"updated_at\": \"2024-01-01T00:00:00Z\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "4a21a542-78ac-4e62-9842-0463731f3fcc",
+          "body": "{\"message\": \"Unauthorized\"}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "Unauthorized",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a4b5c6d7-e8f9-0123-def0-234567890123",
+      "type": "http",
+      "documentation": "Get all rentals",
+      "method": "get",
+      "endpoint": "rentals",
+      "responses": [
+        {
+          "uuid": "210d693d-0b8e-4a34-a581-7cf1340b30b6",
+          "body": "{\"rentals\": [{\"id\": 1, \"name\": \"Appartement Paris\", \"surface\": 50, \"price\": 1200, \"picture\": \"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688\", \"description\": \"Bel appartement au coeur de Paris\", \"owner\": {\"id\": 1, \"name\": \"Patrick\"}, \"created_at\": \"2024-01-01T00:00:00Z\", \"updated_at\": \"2024-01-01T00:00:00Z\"}]}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "90740893-33cb-495b-be0c-b96cbfbd61e8",
+          "body": "{\"message\": \"Unauthorized\"}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "Unauthorized",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a5b6c7d8-e9f0-1234-ef01-345678901234",
+      "type": "http",
+      "documentation": "Get rental by ID",
+      "method": "get",
+      "endpoint": "rentals/:id",
+      "responses": [
+        {
+          "uuid": "47f30ec0-56ad-4bf3-adea-775654bee9e6",
+          "body": "{\"id\": 1, \"name\": \"Appartement Paris\", \"surface\": 50, \"price\": 1200, \"picture\": \"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688\", \"description\": \"Bel appartement au coeur de Paris avec vue sur la Tour Eiffel\", \"owner\": {\"id\": 1, \"name\": \"Patrick\"}, \"created_at\": \"2024-01-01T00:00:00Z\", \"updated_at\": \"2024-01-01T00:00:00Z\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "ad671a00-7c6d-438f-b97e-9a060777a39f",
+          "body": "{\"message\": \"Rental not found\"}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Not found",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a6b7c8d9-e0f1-2345-f012-456789012345",
+      "type": "http",
+      "documentation": "Create new rental",
+      "method": "post",
+      "endpoint": "rentals",
+      "responses": [
+        {
+          "uuid": "5b6cd9ec-dcd6-4739-8692-58bca277db9e",
+          "body": "{\"message\": \"Rental created!\"}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "781b6dd4-bbaa-45da-bc1f-96803960c109",
+          "body": "{\"message\": \"Validation error\"}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Bad request",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a7b8c9d0-e1f2-3456-0123-567890123456",
+      "type": "http",
+      "documentation": "Update rental",
+      "method": "put",
+      "endpoint": "rentals/:id",
+      "responses": [
+        {
+          "uuid": "35fe6d23-da45-4c86-ab97-24260ee05730",
+          "body": "{\"message\": \"Rental updated!\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "d35d646c-f56d-4471-9c72-611eae27e78c",
+          "body": "{\"message\": \"Rental not found\"}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Not found",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a8b9c0d1-e2f3-4567-1234-678901234567",
+      "type": "http",
+      "documentation": "Get user by ID",
+      "method": "get",
+      "endpoint": "user/:id",
+      "responses": [
+        {
+          "uuid": "ccb5d593-442c-46bc-b513-dc445f50b6da",
+          "body": "{\"id\": 1, \"name\": \"John Doe\", \"email\": \"john@example.com\", \"created_at\": \"2024-01-01T00:00:00Z\", \"updated_at\": \"2024-01-01T00:00:00Z\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "e10b9ec6-0010-4457-bc78-164a6988e48c",
+          "body": "{\"message\": \"User not found\"}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Not found",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    },
+    {
+      "uuid": "a9b0c1d2-e3f4-5678-2345-789012345678",
+      "type": "http",
+      "documentation": "Send message",
+      "method": "post",
+      "endpoint": "messages",
+      "responses": [
+        {
+          "uuid": "15582e17-2400-42c8-9cae-4e7c304d0177",
+          "body": "{\"message\": \"Message sent!\"}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": true,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        },
+        {
+          "uuid": "77396087-f1c9-434a-8c96-185c36775231",
+          "body": "{\"message\": \"Validation error\"}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Bad request",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "default": false,
+          "callbacks": [],
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "crudKey": "id"
+        }
+      ],
+      "streamingMode": null,
+      "streamingInterval": 0,
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    },
+    {
+      "type": "route",
+      "uuid": "a2b3c4d5-e6f7-8901-bcde-f12345678901"
+    },
+    {
+      "type": "route",
+      "uuid": "a3b4c5d6-e7f8-9012-cdef-123456789012"
+    },
+    {
+      "type": "route",
+      "uuid": "a4b5c6d7-e8f9-0123-def0-234567890123"
+    },
+    {
+      "type": "route",
+      "uuid": "a5b6c7d8-e9f0-1234-ef01-345678901234"
+    },
+    {
+      "type": "route",
+      "uuid": "a6b7c8d9-e0f1-2345-f012-456789012345"
+    },
+    {
+      "type": "route",
+      "uuid": "a7b8c9d0-e1f2-3456-0123-567890123456"
+    },
+    {
+      "type": "route",
+      "uuid": "a8b9c0d1-e2f3-4567-1234-678901234567"
+    },
+    {
+      "type": "route",
+      "uuid": "a9b0c1d2-e3f4-5678-2345-789012345678"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,DELETE,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type,Authorization"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}
