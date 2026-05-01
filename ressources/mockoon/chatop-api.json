@@ -27,7 +27,7 @@
               "value": "application/json"
             }
           ],
-          "bodyType": "INLINE",
+          "bodyType": "DATABUCKET",
           "filePath": "",
           "databucketID": "",
           "sendFileAsBody": false,
