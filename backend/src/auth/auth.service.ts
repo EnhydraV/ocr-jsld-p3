@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma.service';
@@ -11,10 +11,25 @@ export class AuthService {
     return this.prisma.user.findUnique({ where: { email: email } });
   }
 
-  async register(name: string, email: string, password: string): Promise<User> {
+  async register(name: string, email: string, password: string): Promise<any> {
+    // Vérifier que tous les champs existent et sont remplis
+    if (!password || !email || !name) {
+      throw new BadRequestException('Please fill all fields');
+    }
+    // Normalise l'email
+    email = email.toLowerCase();
+    // Contrôler (de manière basique) que l'email est valide
+    if (!email.includes('@')) {
+      throw new BadRequestException('Please enter a valid email address');
+    }
+    // Vérifier que l'email n'est pas déjà en base de données
+    if ((await this.findByEmail(email)) !== null) {
+      throw new BadRequestException('This email already exists');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const now = new Date();
-    return this.prisma.user.create({
+
+    await this.prisma.user.create({
       data: {
         name: name,
         email: email,
