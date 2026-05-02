@@ -79,7 +79,7 @@
           "uuid": "51783113-a2f5-4241-bfca-dadce544a71e",
           "body": "{\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTY0MDAwMDAwMH0.dummytoken\"}",
           "latency": 0,
-          "statusCode": 200,
+          "statusCode": 401,
           "label": "Success",
           "headers": [
             {

@@ -1,12 +1,21 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma.service';
 import { RegisterDto } from '../models/RegisterDto';
+import { LoginDto } from '../models/LoginDto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { email: email } });
@@ -41,8 +50,11 @@ export class AuthService {
     });
   }
 
-  async validateUser(email: string, password: string): Promise<User | null> {
-    const user = await this.findByEmail(email);
+  async validateUser(data: LoginDto): Promise<Omit<User, 'password'>> {
+    if (!data.password || !data.email) {
+      throw new BadRequestException('Please fill all fields');
+    }
+    const user = await this.findByEmail(data.email);
 
     /**
      *  Si l'utilisateur est dans la base et que le hash en base de données
@@ -50,9 +62,18 @@ export class AuthService {
      *  https://docs.nestjs.com/security/encryption-and-hashing#hashing
      **/
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      return user;
+    if (user && (await bcrypt.compare(data.password, user.password))) {
+      const { password, ...result } = user;
+      return result;
     }
-    return null;
+
+    throw new UnauthorizedException('Invalid credentials');
+  }
+
+  async login(user: Omit<User, 'password'>) {
+    const payload = { email: user.email, sub: user.id };
+    return Promise.resolve({
+      token: this.jwtService.sign(payload),
+    });
   }
 }
