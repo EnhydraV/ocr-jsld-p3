@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import RentalDetail from './pages/RentalDetail';
+import RentalNew from './pages/RentalNew';
 import Profile from './pages/Profile';
 
 function App() {
@@ -28,6 +29,14 @@ function App() {
             element={
               <PrivateRoute>
                 <RentalDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/rentals/new"
+            element={
+              <PrivateRoute>
+                <RentalNew />
               </PrivateRoute>
             }
           />
