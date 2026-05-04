@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-  Request,
-  Get,
-} from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from '../models/RegisterDto';
 import {
@@ -19,11 +12,12 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '@prisma/client';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { UserResponseDto } from '../models/UserResponseDto';
-import { LoginResponseDto } from '../models/LoginResponseDto';
 import { LoginDto } from '../models/LoginDto';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import type { SafeUser } from '../types/user.types';
+import { LoginPayloadResponse } from '../models/LoginPayloadResponse';
 
 @Controller('auth')
 export class AuthController {
@@ -45,12 +39,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Authentifier un utilisateur' })
   @ApiOkResponse({
     description: "L'utilisateur est authentifié",
-    type: LoginResponseDto,
+    type: LoginPayloadResponse,
   })
   @ApiUnauthorizedResponse({ description: 'Les identifiants sont incorrects' })
   @ApiBody({ type: LoginDto })
-  async login(@Request() req) {
-    return await this.authService.login(req.user as User);
+  async login(@CurrentUser() user: SafeUser): Promise<any> {
+    return await this.authService.login(user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -65,8 +59,7 @@ export class AuthController {
   })
   @ApiSecurity('bearer')
   @ApiBearerAuth()
-  async me(@Request() req): Promise<Omit<User, 'password'>> {
-    const { password, ...res } = req.user as User;
-    return Promise.resolve(res);
+  async me(@CurrentUser() user: SafeUser): Promise<SafeUser> {
+    return Promise.resolve(user);
   }
 }

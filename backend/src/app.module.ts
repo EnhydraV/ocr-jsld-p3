@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma.module';
 import { UsersModule } from './users/users.module';
 import { RouterModule } from '@nestjs/core';
+import { RentalsModule } from './rentals/rentals.module';
 
 @Module({
   imports: [
@@ -19,11 +20,14 @@ import { RouterModule } from '@nestjs/core';
             path: '',
             module: AuthModule,
           },
+          {
+            path: '',
+            module: RentalsModule,
+          },
         ],
       },
     ]),
+    RentalsModule,
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}
