@@ -1,19 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { CreateRentalDto } from '../models/CreateRentalDto';
-import { SafeUser } from '../types/user.types';
-import { Rental } from '@prisma/client';
+import {Injectable} from '@nestjs/common';
+import {PrismaService} from '../prisma.service';
+import {CreateRentalDto} from '../models/CreateRentalDto';
+import {SafeUser} from '../types/user.types';
+import {Rental} from '@prisma/client';
 
 @Injectable()
 export class RentalsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {
+  }
 
   async findAll(): Promise<Rental[]> {
-    return this.prisma.rental.findMany();
+    return this.prisma.rental.findMany({
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+      },
+    });
   }
 
   async findOne(id: number): Promise<Rental | null> {
-    return this.prisma.rental.findFirst({ where: { id: id } });
+    return this.prisma.rental.findFirst({
+      where: {id: id},
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+      },
+    });
   }
 
   async create(user: SafeUser, data: CreateRentalDto): Promise<Rental> {
