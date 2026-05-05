@@ -22,6 +22,10 @@ import { RentalsModule } from './rentals/rentals.module';
           },
           {
             path: '',
+            module: UsersModule,
+          },
+          {
+            path: '',
             module: RentalsModule,
           },
         ],
