@@ -5,5 +5,5 @@ export class OwnerDto {
   id: number;
 
   @ApiProperty()
-  name: string;
+  name: string | null;
 }

@@ -7,12 +7,14 @@ import {
   Post,
   UseGuards,
   Body,
+  Put,
 } from '@nestjs/common';
 import { RentalsService } from './rentals.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiParam,
@@ -24,6 +26,7 @@ import { CreateRentalDto } from '../models/CreateRentalDto';
 import { RentalListDto } from '../models/RentalListDto';
 import { RentalDto } from '../models/RentalDto';
 import type { SafeUser } from '../types/user.types';
+import { MessageResponse } from '../models/MessageResponse';
 
 @UseGuards(JwtAuthGuard)
 @ApiUnauthorizedResponse({
@@ -59,9 +62,27 @@ export class RentalsController {
   @Post()
   @ApiCreatedResponse({
     description: 'Crée une nouvelle location',
-    type: RentalDto,
+    type: MessageResponse,
   })
   async create(@CurrentUser() user: SafeUser, @Body() data: CreateRentalDto) {
     return this.rentalsService.create(user, data);
+  }
+
+  @Put(':id')
+  @ApiParam({ name: 'id', type: Number })
+  @ApiCreatedResponse({
+    description: 'Modifie une location',
+    type: MessageResponse,
+  })
+  @ApiForbiddenResponse({
+    description: "L'utilisateur n'est pas autorisé à modifier cette location",
+  })
+  @ApiNotFoundResponse({ description: "La location n'existe pas" })
+  async update(
+    @CurrentUser() user: SafeUser,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: CreateRentalDto,
+  ) {
+    return this.rentalsService.update(user, id, data);
   }
 }

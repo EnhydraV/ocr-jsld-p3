@@ -21,6 +21,9 @@ export class RentalDto {
   surface: number;
 
   @ApiProperty()
+  owner_id: number;
+
+  @ApiProperty()
   owner: OwnerDto;
 
   @ApiProperty()
