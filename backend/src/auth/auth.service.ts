@@ -22,17 +22,7 @@ export class AuthService {
     return this.prisma.user.findUnique({ where: { email: email } });
   }
 
-  async register(data: RegisterDto): Promise<any> {
-    // Vérifier que tous les champs existent et sont remplis
-    if (!data.password || !data.email || !data.name) {
-      throw new BadRequestException('Please fill all fields');
-    }
-    // Normalise l'email
-    data.email = data.email.toLowerCase();
-    // Contrôler (de manière basique) que l'email est valide
-    if (!data.email.includes('@')) {
-      throw new BadRequestException('Please enter a valid email address');
-    }
+  async register(data: RegisterDto) {
     // Vérifier que l'email n'est pas déjà en base de données
     if ((await this.findByEmail(data.email)) !== null) {
       throw new BadRequestException('This email already exists');
@@ -40,7 +30,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const now = new Date();
 
-    await this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         name: data.name,
         email: data.email,
@@ -49,12 +39,11 @@ export class AuthService {
         updated_at: now,
       },
     });
+
+    return await this.login(toSafeUser(user));
   }
 
   async validateUser(data: LoginDto): Promise<SafeUser> {
-    if (!data.password || !data.email) {
-      throw new BadRequestException('Please fill all fields');
-    }
     const user = await this.findByEmail(data.email);
 
     /**

@@ -24,8 +24,8 @@ import {
 } from '@nestjs/swagger';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { CreateRentalDto } from '../models/CreateRentalDto';
-import { RentalListDto } from '../models/RentalListDto';
-import { RentalDto } from '../models/RentalDto';
+import { RentalListResponse } from '../models/RentalListResponse';
+import { RentalResponse } from '../models/RentalResponse';
 import type { SafeUser } from '../types/user.types';
 import { MessageResponse } from '../models/MessageResponse';
 
@@ -43,7 +43,7 @@ export class RentalsController {
   @Get()
   @ApiOkResponse({
     description: 'Retourne la liste de toutes les locations',
-    type: RentalListDto,
+    type: RentalListResponse,
   })
   async list() {
     return Promise.resolve({ rentals: await this.rentalsService.findAll() });
@@ -51,7 +51,7 @@ export class RentalsController {
 
   @Get(':id')
   @ApiParam({ name: 'id', type: Number })
-  @ApiOkResponse({ description: 'Retourne la location', type: RentalDto })
+  @ApiOkResponse({ description: 'Retourne la location', type: RentalResponse })
   @ApiNotFoundResponse({ description: "La location n'existe pas" })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const rental = await this.rentalsService.findOne(id);

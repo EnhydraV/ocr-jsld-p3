@@ -6,14 +6,14 @@ import {
 import { PrismaService } from '../prisma.service';
 import { CreateRentalDto } from '../models/CreateRentalDto';
 import { SafeUser } from '../types/user.types';
-import { RentalDto } from '../models/RentalDto';
+import { RentalResponse } from '../models/RentalResponse';
 import { MessageResponse } from '../models/MessageResponse';
 
 @Injectable()
 export class RentalsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(): Promise<RentalDto[]> {
+  async findAll(): Promise<RentalResponse[]> {
     return this.prisma.rental.findMany({
       include: {
         owner: {
@@ -26,7 +26,7 @@ export class RentalsService {
     });
   }
 
-  async findOne(id: number): Promise<RentalDto | null> {
+  async findOne(id: number): Promise<RentalResponse | null> {
     return this.prisma.rental.findFirst({
       where: { id: id },
       include: {

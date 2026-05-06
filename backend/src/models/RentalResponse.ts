@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { OwnerDto } from './OwnerDto';
+import { OwnerResponse } from './OwnerResponse';
 
-export class RentalDto {
+export class RentalResponse {
   @ApiProperty()
   id: number;
 
@@ -24,7 +24,7 @@ export class RentalDto {
   owner_id: number;
 
   @ApiProperty()
-  owner: OwnerDto;
+  owner: OwnerResponse;
 
   @ApiProperty()
   created_at: Date;

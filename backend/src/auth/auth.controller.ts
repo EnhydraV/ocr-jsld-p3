@@ -5,7 +5,6 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiSecurity,
@@ -13,7 +12,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { UserResponseDto } from '../models/UserResponseDto';
+import { UserResponse } from '../models/UserResponse';
 import { LoginDto } from '../models/LoginDto';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import type { SafeUser } from '../types/user.types';
@@ -25,12 +24,15 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: 'Inscrire un utilisateur' })
-  @ApiCreatedResponse({ description: "L'utilisateur a été inscrit" })
+  @ApiOkResponse({
+    description: "L'utilisateur a été inscrit",
+    type: LoginPayloadResponse,
+  })
   @ApiBadRequestResponse({
     description:
       "Les données sont incomplètes ou invalides, ou l'email existe déjà",
   })
-  async register(@Body() data: RegisterDto): Promise<any> {
+  async register(@Body() data: RegisterDto): Promise<LoginPayloadResponse> {
     return await this.authService.register(data);
   }
 
@@ -52,7 +54,7 @@ export class AuthController {
   @ApiOperation({ summary: "Récupère l'utilisateur courant" })
   @ApiOkResponse({
     description: "Les données de l'utilisateur authentifié",
-    type: UserResponseDto,
+    type: UserResponse,
   })
   @ApiUnauthorizedResponse({
     description: "L'utilisateur n'est pas authentifié",

@@ -14,7 +14,7 @@ import {
   ApiSecurity,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UserResponseDto } from '../models/UserResponseDto';
+import { UserResponse } from '../models/UserResponse';
 import { UsersService } from './users.service';
 
 @UseGuards(JwtAuthGuard)
@@ -31,7 +31,7 @@ export class UsersController {
   @ApiParam({ name: 'id', type: Number })
   @ApiOkResponse({
     description: "Retourne l'utilisateur",
-    type: UserResponseDto,
+    type: UserResponse,
   })
   @ApiNotFoundResponse({ description: "L'utilisateur n'existe pas" })
   async findOne(@Param('id', ParseIntPipe) id: number) {
