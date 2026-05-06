@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma.module';
 import { UsersModule } from './users/users.module';
 import { RouterModule } from '@nestjs/core';
 import { RentalsModule } from './rentals/rentals.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -28,10 +29,15 @@ import { RentalsModule } from './rentals/rentals.module';
             path: '',
             module: RentalsModule,
           },
+          {
+            path: '',
+            module: MessagesModule,
+          },
         ],
       },
     ]),
     RentalsModule,
+    MessagesModule,
   ],
 })
 export class AppModule {}

@@ -12,6 +12,7 @@ import {
 import { RentalsService } from './rentals.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -32,6 +33,7 @@ import { MessageResponse } from '../models/MessageResponse';
 @ApiUnauthorizedResponse({
   description: "L'utilisateur n'est pas authentifié",
 })
+@ApiBadRequestResponse({ description: 'Format des données invalide' })
 @ApiSecurity('bearer')
 @ApiBearerAuth()
 @Controller('rentals')
