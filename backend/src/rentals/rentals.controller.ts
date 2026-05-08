@@ -8,12 +8,17 @@ import {
   UseGuards,
   Body,
   Put,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { OptionalPicturePipe, PicturePipe } from '../pipes/picture-upload.pipe';
 import { RentalsService } from './rentals.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -29,6 +34,8 @@ import { RentalListResponse } from '../models/RentalListResponse';
 import { RentalResponse } from '../models/RentalResponse';
 import type { SafeUser } from '../types/user.types';
 import { MessageResponse } from '../models/MessageResponse';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 @UseGuards(JwtAuthGuard)
 @ApiUnauthorizedResponse({
@@ -46,7 +53,7 @@ export class RentalsController {
     description: 'Liste des locations',
     type: RentalListResponse,
   })
-  @ApiOperation({ summary: 'Liste des locations' })
+  @ApiOperation({ summary: 'Lister toutes les locations' })
   async list() {
     return Promise.resolve({ rentals: await this.rentalsService.findAll() });
   }
@@ -66,16 +73,50 @@ export class RentalsController {
 
   @Post()
   @ApiOperation({ summary: 'Créer une location' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['name', 'description', 'price', 'surface', 'picture'],
+      properties: {
+        name: { type: 'string' },
+        description: { type: 'string' },
+        price: { type: 'number' },
+        surface: { type: 'number' },
+        picture: { type: 'string', format: 'binary' },
+      },
+    },
+  })
   @ApiCreatedResponse({
     description: 'Location créée',
     type: MessageResponse,
   })
-  async create(@CurrentUser() user: SafeUser, @Body() data: CreateRentalDto) {
-    return this.rentalsService.create(user, data);
+  @UseInterceptors(FileInterceptor('picture', { storage: memoryStorage() }))
+  async create(
+    @CurrentUser() user: SafeUser,
+    @Body() data: CreateRentalDto,
+    @UploadedFile(PicturePipe)
+    picture: Express.Multer.File,
+  ) {
+    return this.rentalsService.create(user, data, picture);
   }
 
   @Put(':id')
   @ApiParam({ name: 'id', type: Number })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['name', 'description', 'price', 'surface'],
+      properties: {
+        name: { type: 'string' },
+        description: { type: 'string' },
+        price: { type: 'number' },
+        surface: { type: 'number' },
+        picture: { type: 'string', format: 'binary' },
+      },
+    },
+  })
   @ApiCreatedResponse({
     description: 'Location modifiée',
     type: MessageResponse,
@@ -85,11 +126,14 @@ export class RentalsController {
   })
   @ApiOperation({ summary: 'Modifier une location' })
   @ApiNotFoundResponse({ description: "La location n'existe pas" })
+  @UseInterceptors(FileInterceptor('picture', { storage: memoryStorage() }))
   async update(
     @CurrentUser() user: SafeUser,
     @Param('id', ParseIntPipe) id: number,
     @Body() data: CreateRentalDto,
+    @UploadedFile(OptionalPicturePipe)
+    picture?: Express.Multer.File,
   ) {
-    return this.rentalsService.update(user, id, data);
+    return this.rentalsService.update(user, id, data, picture);
   }
 }

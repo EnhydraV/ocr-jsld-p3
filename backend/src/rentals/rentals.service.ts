@@ -8,6 +8,9 @@ import { CreateRentalDto } from '../models/CreateRentalDto';
 import { SafeUser } from '../types/user.types';
 import { RentalResponse } from '../models/RentalResponse';
 import { MessageResponse } from '../models/MessageResponse';
+import { mkdir, writeFile } from 'fs/promises';
+import { extname } from 'path';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class RentalsService {
@@ -40,16 +43,28 @@ export class RentalsService {
     });
   }
 
+  async uploadedFileToURL(picture: Express.Multer.File) {
+    const basePath = 'uploads/rentals/';
+    const frontend = '../frontend/';
+    const filename = `${randomUUID()}${extname(picture.originalname)}`;
+    await mkdir(`${frontend}${basePath}`, { recursive: true });
+    await writeFile(`${frontend}${basePath}${filename}`, picture.buffer);
+    return '/' + basePath + filename;
+  }
+
   async create(
     user: SafeUser,
     data: CreateRentalDto,
+    picture: Express.Multer.File,
   ): Promise<MessageResponse> {
     const now = new Date();
+
+    const pictureUrl = await this.uploadedFileToURL(picture);
 
     await this.prisma.rental.create({
       data: {
         name: data.name,
-        picture: data.picture,
+        picture: pictureUrl,
         description: data.description,
         price: data.price,
         surface: data.surface,
@@ -70,6 +85,7 @@ export class RentalsService {
     user: SafeUser,
     id: number,
     data: CreateRentalDto,
+    picture?: Express.Multer.File,
   ): Promise<MessageResponse> {
     const rental = await this.findOne(id);
     if (rental === null) {
@@ -79,16 +95,20 @@ export class RentalsService {
       throw new ForbiddenException('Forbidden');
     }
 
-    const now = new Date();
+    let pictureUrl: undefined | string = undefined;
+    if (picture) {
+      pictureUrl = await this.uploadedFileToURL(picture);
+    }
+
     await this.prisma.rental.update({
       where: { id: id },
       data: {
         name: data.name,
-        picture: data.picture,
         description: data.description,
         price: data.price,
         surface: data.surface,
-        updated_at: now,
+        updated_at: new Date(),
+        picture: pictureUrl,
       },
     });
 
