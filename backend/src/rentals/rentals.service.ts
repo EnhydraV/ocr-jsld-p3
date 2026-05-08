@@ -9,11 +9,14 @@ import { SafeUser } from '../types/user.types';
 import { RentalResponse } from '../models/RentalResponse';
 import { MessageResponse } from '../models/MessageResponse';
 import { mkdir, writeFile } from 'fs/promises';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { extname } from 'path';
 import { randomUUID } from 'crypto';
 
 @Injectable()
 export class RentalsService {
+  private readonly logger = new Logger(RentalsService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(): Promise<RentalResponse[]> {
@@ -47,8 +50,15 @@ export class RentalsService {
     const basePath = 'uploads/rentals/';
     const frontend = '../frontend/';
     const filename = `${randomUUID()}${extname(picture.originalname)}`;
-    await mkdir(`${frontend}${basePath}`, { recursive: true });
-    await writeFile(`${frontend}${basePath}${filename}`, picture.buffer);
+    try {
+      await mkdir(`${frontend}${basePath}`, { recursive: true });
+      await writeFile(`${frontend}${basePath}${filename}`, picture.buffer);
+    } catch (err) {
+      this.logger.error("Impossible d'écrire le fichier uploadé", err);
+      throw new InternalServerErrorException(
+        "Erreur lors de l'enregistrement du fichier",
+      );
+    }
     return '/' + basePath + filename;
   }
 
