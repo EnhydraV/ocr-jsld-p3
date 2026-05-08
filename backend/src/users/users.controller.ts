@@ -1,29 +1,15 @@
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  UseGuards,
-} from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import {
-  ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiSecurity,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserResponse } from '../models/UserResponse';
 import { UsersService } from './users.service';
+import { JwtAuth } from '../decorators/jwt-auth.decorator';
 
-@UseGuards(JwtAuthGuard)
-@ApiUnauthorizedResponse({
-  description: "L'utilisateur n'est pas authentifié",
-})
-@ApiSecurity('bearer')
-@ApiBearerAuth()
+@JwtAuth()
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

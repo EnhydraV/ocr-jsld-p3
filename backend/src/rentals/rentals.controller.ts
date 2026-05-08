@@ -5,7 +5,6 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  UseGuards,
   Body,
   Put,
   UseInterceptors,
@@ -13,10 +12,8 @@ import {
 } from '@nestjs/common';
 import { OptionalPicturePipe, PicturePipe } from '../pipes/picture-upload.pipe';
 import { RentalsService } from './rentals.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
@@ -25,8 +22,6 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiSecurity,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { CreateRentalDto } from '../models/CreateRentalDto';
@@ -36,14 +31,10 @@ import type { SafeUser } from '../types/user.types';
 import { MessageResponse } from '../models/MessageResponse';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import { JwtAuth } from '../decorators/jwt-auth.decorator';
 
-@UseGuards(JwtAuthGuard)
-@ApiUnauthorizedResponse({
-  description: "L'utilisateur n'est pas authentifié",
-})
+@JwtAuth()
 @ApiBadRequestResponse({ description: 'Format des données invalide' })
-@ApiSecurity('bearer')
-@ApiBearerAuth()
 @Controller('rentals')
 export class RentalsController {
   constructor(private readonly rentalsService: RentalsService) {}

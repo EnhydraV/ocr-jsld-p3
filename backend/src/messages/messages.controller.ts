@@ -1,25 +1,17 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
-  ApiSecurity,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { MessagesService } from './messages.service';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import type { SafeUser } from '../types/user.types';
 import { MessageDto } from '../models/MessageDto';
 import { MessageResponse } from '../models/MessageResponse';
+import { JwtAuth } from '../decorators/jwt-auth.decorator';
 
-@UseGuards(JwtAuthGuard)
-@ApiUnauthorizedResponse({
-  description: "L'utilisateur n'est pas authentifié",
-})
-@ApiSecurity('bearer')
-@ApiBearerAuth()
+@JwtAuth()
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}

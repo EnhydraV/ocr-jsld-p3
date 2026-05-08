@@ -3,20 +3,18 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from '../models/RegisterDto';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiBody,
   ApiOkResponse,
   ApiOperation,
-  ApiSecurity,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { UserResponse } from '../models/UserResponse';
 import { LoginDto } from '../models/LoginDto';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import type { SafeUser } from '../types/user.types';
 import { LoginPayloadResponse } from '../models/LoginPayloadResponse';
+import { JwtAuth } from '../decorators/jwt-auth.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -49,18 +47,13 @@ export class AuthController {
     return await this.authService.login(user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Get('me')
   @ApiOperation({ summary: "Récupère l'utilisateur courant" })
   @ApiOkResponse({
     description: "Les données de l'utilisateur authentifié",
     type: UserResponse,
   })
-  @ApiUnauthorizedResponse({
-    description: "L'utilisateur n'est pas authentifié",
-  })
-  @ApiSecurity('bearer')
-  @ApiBearerAuth()
   async me(@CurrentUser() user: SafeUser): Promise<SafeUser> {
     return Promise.resolve(user);
   }
