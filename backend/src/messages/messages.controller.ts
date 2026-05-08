@@ -4,6 +4,7 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOperation,
   ApiSecurity,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -28,6 +29,7 @@ export class MessagesController {
     description: 'Envoie un message',
     type: MessageResponse,
   })
+  @ApiOperation({ summary: 'Envoyer un message' })
   @ApiBadRequestResponse({ description: 'Format des données invalide' })
   async message(@CurrentUser() user: SafeUser, @Body() data: MessageDto) {
     return this.messagesService.sendMessage(user, data);

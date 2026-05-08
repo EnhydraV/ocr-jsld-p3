@@ -10,6 +10,7 @@ import {
   ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiParam,
   ApiSecurity,
   ApiUnauthorizedResponse,
@@ -33,6 +34,7 @@ export class UsersController {
     description: "Retourne l'utilisateur",
     type: UserResponse,
   })
+  @ApiOperation({ summary: 'Informations sur un utilisateur' })
   @ApiNotFoundResponse({ description: "L'utilisateur n'existe pas" })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.findOne(id);

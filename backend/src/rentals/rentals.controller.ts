@@ -18,6 +18,7 @@ import {
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiParam,
   ApiSecurity,
   ApiUnauthorizedResponse,
@@ -42,9 +43,10 @@ export class RentalsController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Retourne la liste de toutes les locations',
+    description: 'Liste des locations',
     type: RentalListResponse,
   })
+  @ApiOperation({ summary: 'Liste des locations' })
   async list() {
     return Promise.resolve({ rentals: await this.rentalsService.findAll() });
   }
@@ -52,6 +54,7 @@ export class RentalsController {
   @Get(':id')
   @ApiParam({ name: 'id', type: Number })
   @ApiOkResponse({ description: 'Retourne la location', type: RentalResponse })
+  @ApiOperation({ summary: 'Informations sur une location' })
   @ApiNotFoundResponse({ description: "La location n'existe pas" })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const rental = await this.rentalsService.findOne(id);
@@ -62,8 +65,9 @@ export class RentalsController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Créer une location' })
   @ApiCreatedResponse({
-    description: 'Crée une nouvelle location',
+    description: 'Location créée',
     type: MessageResponse,
   })
   async create(@CurrentUser() user: SafeUser, @Body() data: CreateRentalDto) {
@@ -73,12 +77,13 @@ export class RentalsController {
   @Put(':id')
   @ApiParam({ name: 'id', type: Number })
   @ApiCreatedResponse({
-    description: 'Modifie une location',
+    description: 'Location modifiée',
     type: MessageResponse,
   })
   @ApiForbiddenResponse({
     description: "L'utilisateur n'est pas autorisé à modifier cette location",
   })
+  @ApiOperation({ summary: 'Modifier une location' })
   @ApiNotFoundResponse({ description: "La location n'existe pas" })
   async update(
     @CurrentUser() user: SafeUser,
