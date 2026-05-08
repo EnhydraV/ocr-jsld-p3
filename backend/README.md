@@ -101,6 +101,32 @@ Champs acceptés pour `POST`/`PUT` : `name`, `description`, `price`, `surface`, 
 | `POST` | `/messages` | ✓ | Envoyer un message |
 
 
+## Sécurité
+
+### Mots de passe
+
+Les mots de passe sont hachés avec **bcrypt** (coût 10) avant toute persistance — le mot de passe en clair n'est jamais stocké ni loggé. La comparaison lors du login se fait exclusivement via `bcrypt.compare`.
+
+Le format attendu à l'inscription est validé par `class-validator` : 8 caractères minimum, au moins une majuscule, un chiffre et un caractère spécial.
+
+### Authentification
+
+Toutes les routes sont protégées par JWT (Bearer token) à l'exception de `/auth/register`, `/auth/login` et la documentation Swagger. Le décorateur `@JwtAuth()` applique le guard, le schéma Swagger et la réponse 401 en une seule ligne.
+
+### Upload de fichiers
+
+Les fichiers uploadés sont validés par magic bytes (lecture des octets de signature du fichier via la librairie `file-type`) — indépendamment du `Content-Type` déclaré par le client. Seuls les formats PNG et JPEG sont acceptés, avec une taille maximale de 3 Mo.
+
+## Architecture & principes SOLID
+
+L'architecture s'appuie sur les principes SOLID :
+
+- **S** : chaque classe a un rôle précis — le controller gère le routing, le service gère la logique métier, les DTOs la validation, etc.
+- **O** : les modules NestJS peuvent être étendus sans toucher au code existant
+- **L** : `JwtAuthGuard` et `PrismaService` héritent de leurs classes parentes sans en modifier le comportement
+- **I** : les DTOs sont spécifiques à leur usage, `SafeUser` n'expose que ce dont on a besoin (pas de mot de passe)
+- **D** : les dépendances sont injectées via le système DI de NestJS, pas instanciées directement
+
 ## Structure du projet
 
 ```
