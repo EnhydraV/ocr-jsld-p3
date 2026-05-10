@@ -17,7 +17,7 @@ API REST NestJS pour l'application de location immobilière ChaTop.
 ## Prérequis
 
 - Node.js >= 20
-- Une instance MariaDB accessible
+- Une instance MariaDB ou MySQL accessible
 
 ## Installation
 
